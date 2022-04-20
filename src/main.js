@@ -5,7 +5,6 @@ let config = {
     scene: [ Menu, Play ]
 }
 
-
 let game = new Phaser.Game(config);
 
 // set UI sizes
