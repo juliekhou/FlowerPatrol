@@ -18,8 +18,8 @@ class Play extends Phaser.Scene {
         this.load.spritesheet('explosion', './assets/flowasheet.png', {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});
         this.load.spritesheet('smallExplosion', './assets/fastsheetresized.png', {frameWidth: 64, frameHeight: 32, startFrame: 0, endFrame: 9});
 
-        //background music: Withu by Blvk - Licensed by Mound Media Inc.
-        this.load.audio('music', './assets/withu_blvk.mp3');
+        //background music: lofi from freesounds.org
+        this.load.audio('music', './assets/lofi.wav');
     }
     
     create() {
@@ -36,7 +36,7 @@ class Play extends Phaser.Scene {
             delay: 0
         }
         this.music.play(musicConfig);
-        
+
         // place tile sprite
         this.starfield = this.add.tileSprite(0, 0, 640, 480, 'starfield').setOrigin(0, 0);
 
