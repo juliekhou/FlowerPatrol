@@ -17,7 +17,7 @@ class Play extends Phaser.Scene {
         this.starfield = this.add.tileSprite(0, 0, 640, 480, 'starfield').setOrigin(0, 0);
 
         // green UI background
-        this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderUISize * 2, 0x00FF00).setOrigin(0, 0);
+        this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderUISize * 2, #EDE7B1).setOrigin(0, 0);
         
         // white borders
         this.add.rectangle(0, 0, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0, 0);
@@ -29,9 +29,14 @@ class Play extends Phaser.Scene {
         this.p1Rocket = new Rocket(this, game.config.width/2, game.config.height - borderUISize - borderPadding, 'rocket').setOrigin(0.5, 0);
         
         // add spaceships (x3) 
-        this.ship01 = new Spaceship(this, game.config.width + borderUISize*6, borderUISize*4, 'spaceship', 0, 30).setOrigin(0, 0);
-        this.ship02 = new Spaceship(this, game.config.width + borderUISize*3, borderUISize*5 + borderPadding*2, 'spaceship', 0, 20).setOrigin(0,0);
-        this.ship03 = new Spaceship(this, game.config.width, borderUISize*6 + borderPadding*4, 'spaceship', 0, 10).setOrigin(0,0);
+        // this.ship01 = new Spaceship(this, game.config.width + borderUISize*6, borderUISize*4, 'spaceship', 0, 30).setOrigin(0, 0);
+        // this.ship02 = new Spaceship(this, game.config.width + borderUISize*3, borderUISize*5 + borderPadding*2, 'spaceship', 0, 20).setOrigin(0,0);
+        // this.ship03 = new Spaceship(this, game.config.width, borderUISize*6 + borderPadding*4, 'spaceship', 0, 10).setOrigin(0,0);
+
+        // add smaller spaceships (x3)
+        this.smallship01 = new SmallerSpaceship(this, game.config.width + borderUISize*6, borderUISize*4, 'spaceship', 0, 60).setOrigin(0, 0);
+        this.smallship02 = new SmallerSpaceship(this, game.config.width + borderUISize*3, borderUISize*5 + borderPadding*2, 'spaceship', 0, 40).setOrigin(0,0);
+        this.smallship03 = new SmallerSpaceship(this, game.config.width, borderUISize*6 + borderPadding*4, 'spaceship', 0, 20).setOrigin(0,0);
 
         // define keys
         keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
@@ -63,6 +68,22 @@ class Play extends Phaser.Scene {
         }
         this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, this.p1Score, scoreConfig);
         
+        // display clock
+        let clockConfig = {
+            fontFamily: 'Courier',
+            fontSize: '28px',
+            backgroundColor: '#F3B141',
+            color: '#843605',
+            align: 'right',
+            padding: {
+            top: 5,
+            bottom: 5,
+            },
+            fixedWidth: 100
+        }
+
+        this.clockRight = this.add.text(game.config.width - (100 + borderUISize + borderPadding), borderUISize + borderPadding*2, this.timeRemaining, clockConfig);
+
         // GAME OVER flag
         this.gameOver = false;
         
@@ -77,6 +98,9 @@ class Play extends Phaser.Scene {
     }
 
     update() {
+
+        this.clockRight.setText(this.clock.getProgress().toString().substr(2, 2));
+
         // check key input for restart
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
             this.scene.restart();
@@ -90,25 +114,43 @@ class Play extends Phaser.Scene {
 
         if (!this.gameOver){
             this.p1Rocket.update();     //update rocket sprite
-            this.ship01.update();       //update spaceships (x3)
-            this.ship02.update();
-            this.ship03.update();
+            // this.ship01.update();       //update spaceships (x3)
+            // this.ship02.update();
+            // this.ship03.update();
+            this.smallship01.update();       //update small spaceships (x3)
+            this.smallship02.update();
+            this.smallship03.update();
         }
 
         // check collisions
-        if(this.checkCollision(this.p1Rocket, this.ship03)) {
+        // if(this.checkCollision(this.p1Rocket, this.ship03)) {
+        //     this.p1Rocket.reset();
+        //     this.shipExplode(this.ship03);
+        //     //console.log('kaboom ship 03');
+        // }
+        // if (this.checkCollision(this.p1Rocket, this.ship02)) {
+        //     this.p1Rocket.reset();
+        //     this.shipExplode(this.ship02);
+        //     // console.log('kaboom ship 02');
+        // }
+        // if (this.checkCollision(this.p1Rocket, this.ship01)) {
+        //     this.p1Rocket.reset();
+        //     this.shipExplode(this.ship01);
+        //     // console.log('kaboom ship 01');
+        // }
+        if(this.checkCollision(this.p1Rocket, this.smallship03)) {
             this.p1Rocket.reset();
-            this.shipExplode(this.ship03);
+            this.shipExplode(this.smallship03);
             //console.log('kaboom ship 03');
         }
-        if (this.checkCollision(this.p1Rocket, this.ship02)) {
+        if (this.checkCollision(this.p1Rocket, this.smallship02)) {
             this.p1Rocket.reset();
-            this.shipExplode(this.ship02);
+            this.shipExplode(this.smallship02);
             // console.log('kaboom ship 02');
         }
-        if (this.checkCollision(this.p1Rocket, this.ship01)) {
+        if (this.checkCollision(this.p1Rocket, this.smallship01)) {
             this.p1Rocket.reset();
-            this.shipExplode(this.ship01);
+            this.shipExplode(this.smallship01);
             // console.log('kaboom ship 01');
         }
 
